@@ -1,4 +1,128 @@
 body {
-  background-color: antiquewhite;
+  background-color: #d4bee4;
+  color: #3b1e54;
+  font-family: fantasy;
+}
+
+.container {
+  background-color: #eeeeee;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(170, 47, 211, 0.15);
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 50px;
   text-align: center;
+  color: #3b1e54;
+}
+
+small {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 36px;
+}
+
+.current-city {
+  display: flex;
+  justify-content: space-between;
+  background-color: #9b7ebd;
+  border-left: 6px solid #3b1e54;
+  border-right: 6px solid #3b1e54;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.current-city:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(143, 47, 211, 0.15);
+}
+
+.name-date-container {
+  margin: 10px 0;
+}
+
+.select-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.cities-select {
+  padding: 8px 18px;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  background-color: #d4bee4;
+  border: 2px solid #3b1e54;
+}
+
+.cities-grid {
+  margin: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.city {
+  display: flex;
+  justify-content: space-between;
+  background-color: #9b7ebd;
+  border-left: 6px solid #3b1e54;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.08);
+  text-align: center;
+  transition: all 200ms ease-in-out;
+}
+
+.city:hover {
+  background-color: #bb7ebd;
+  border-left: 6px solid #7f349c;
+  box-shadow: 0 6px 16px rgba(143, 47, 211, 0.15);
+}
+
+.city-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.city-date {
+  font-size: 16px;
+  margin-bottom: 5px;
+  opacity: 0.6;
+  color: #e0e0e0;
+}
+
+.city-time {
+  margin: 10px 0;
+  font-size: 37px;
+  font-weight: bold;
+  color: #3b1e54;
+}
+
+footer {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  color: #1a1a1a;
+}
+
+a {
+  color: #9b7ebd;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #ded5e9;
 }
