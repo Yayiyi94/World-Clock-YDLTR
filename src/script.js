@@ -5,82 +5,90 @@ function updateTime() {
   let amsterdamElement = document.querySelector("#amsterdam");
   let currentCityElement = document.querySelector("#current");
 
-  //if (currentCityElement) {
-  //let DateElement = currentCityElement.querySelector("#city-date");
-  //let TimeElement = currentCityElement.querySelector("#city-time");
-  //let ActualTime = moment().tz().guess;
+  // Current city time based on user's timezone
+  if (currentCityElement) {
+    let dateElement = currentCityElement.querySelector(".city-date");
+    let timeElement = currentCityElement.querySelector(".city-time");
+    let actualTime = moment().tz(moment.tz.guess()); // Correct way to get user's timezone
 
-  //DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-  //TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
-  //}
+    dateElement.innerHTML = actualTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = actualTime.format("h:mm:ss [<small>]A[</small>]");
+  }
 
+  // Paris time
   if (parisElement) {
-    let DateElement = parisElement.querySelector(".city-date");
-    let TimeElement = parisElement.querySelector(".city-time");
-    let ActualTime = moment().tz("Europe/Paris");
+    let dateElement = parisElement.querySelector(".city-date");
+    let timeElement = parisElement.querySelector(".city-time");
+    let actualTime = moment().tz("Europe/Paris");
 
-    DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-    TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
+    dateElement.innerHTML = actualTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = actualTime.format("h:mm:ss [<small>]A[</small>]");
   }
 
+  // Singapore time
   if (singaporeElement) {
-    let DateElement = singaporeElement.querySelector(".city-date");
-    let TimeElement = singaporeElement.querySelector(".city-time");
-    let ActualTime = moment().tz("Asia/Singapore");
+    let dateElement = singaporeElement.querySelector(".city-date");
+    let timeElement = singaporeElement.querySelector(".city-time");
+    let actualTime = moment().tz("Asia/Singapore");
 
-    DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-    TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
+    dateElement.innerHTML = actualTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = actualTime.format("h:mm:ss [<small>]A[</small>]");
   }
 
+  // Dubai time
   if (dubaiElement) {
-    let DateElement = dubaiElement.querySelector(".city-date");
-    let TimeElement = dubaiElement.querySelector(".city-time");
-    let ActualTime = moment().tz("Asia/Dubai");
+    let dateElement = dubaiElement.querySelector(".city-date");
+    let timeElement = dubaiElement.querySelector(".city-time");
+    let actualTime = moment().tz("Asia/Dubai");
 
-    DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-    TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
+    dateElement.innerHTML = actualTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = actualTime.format("h:mm:ss [<small>]A[</small>]");
   }
 
+  // Amsterdam time
   if (amsterdamElement) {
-    let DateElement = amsterdamElement.querySelector(".city-date");
-    let TimeElement = amsterdamElement.querySelector(".city-time");
-    let ActualTime = moment().tz("Europe/Amsterdam");
+    let dateElement = amsterdamElement.querySelector(".city-date");
+    let timeElement = amsterdamElement.querySelector(".city-time");
+    let actualTime = moment().tz("Europe/Amsterdam");
 
-    DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-    TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
-  }
-
-  if (amsterdamElement) {
-    let DateElement = amsterdamElement.querySelector(".city-date");
-    let TimeElement = amsterdamElement.querySelector(".city-time");
-    let ActualTime = moment().tz("Europe/Amsterdam");
-
-    DateElement.innerHTML = ActualTime.format("MMMM Do YYYY");
-    TimeElement.innerHTML = ActualTime.format("h:mm:ss [<small>]A[</small>]");
+    dateElement.innerHTML = actualTime.format("MMMM Do YYYY");
+    timeElement.innerHTML = actualTime.format("h:mm:ss [<small>]A[</small>]");
   }
 }
 
-updateTime();
-setInterval(updateTime, 1000);
-
 function updateCity(event) {
   let cityTimeZone = event.target.value;
-  cityName = cityTimeZone.replace("_", " ").split("/")[1];
+  if (cityTimeZone === "current") {
+    cityTimeZone = moment.tz.guess();
+  }
+  let cityName =
+    cityTimeZone.replace("_", " ").split("/")[1] || "Your Location";
   let cityDateTime = moment().tz(cityTimeZone);
   let citiesElement = document.querySelector("#cities-grid");
 
   citiesElement.style.display = "block";
   citiesElement.innerHTML = `
-  <div class="current-city">
-  <div class="name-date-container">
-          <div class="city-name">${cityName}</div>
-          <div class="city-date">${cityDateTime.format("MMMM Do YYYY")}</div>
-        </div>
-        <div class="city-time">${cityDateTime.format(
-          "h:mm:ss [<small>]A[</small>]"
-        )}</div>
-        </div>`;
+    <div class="current-city">
+      <div class="name-date-container">
+        <div class="city-name">${cityName}</div>
+        <div class="city-date">${cityDateTime.format("MMMM Do YYYY")}</div>
+      </div>
+      <div class="city-time">${cityDateTime.format(
+        "h:mm:ss [<small>]A[</small>]"
+      )}</div>
+    </div>
+  `;
+
+  //Interval for Updating time for all cities
+  setInterval(() => {
+    updateCity(event);
+  }, 1000);
 }
 
+// Initial call and interval for updating time
+updateTime();
+setInterval(updateTime, 1000);
+
+// Event listener for city selection
 let citiesSelectElement = document.querySelector("#cities-select");
 citiesSelectElement.addEventListener("change", updateCity);
