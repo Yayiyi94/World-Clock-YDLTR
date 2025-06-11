@@ -125,3 +125,7 @@ a:hover {
   text-decoration: underline;
   color: #ded5e9;
 }
+
+#return-button {
+  display: none; /* Hide the button initially */
+}

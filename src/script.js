@@ -67,17 +67,24 @@ function updateCity(event) {
   let citiesElement = document.querySelector("#cities-grid");
 
   citiesElement.style.display = "block";
-  citiesElement.innerHTML = `
-    <div class="current-city">
-      <div class="name-date-container">
-        <div class="city-name">${cityName}</div>
-        <div class="city-date">${cityDateTime.format("MMMM Do YYYY")}</div>
-      </div>
-      <div class="city-time">${cityDateTime.format(
-        "h:mm:ss [<small>]A[</small>]"
-      )}</div>
+
+  citiesElement.innerHTML = `<div class="city" id="current">
+  <div class="name-date-container">
+    <div class="city-name" id="city-name">
+      ${cityName}
     </div>
-  `;
+    <div class="city-date" id="city-date">
+      ${cityDateTime.format("MMMM Do YYYY")}
+    </div>
+  </div>
+  <div class="city-time" id="city-time">
+    ${cityDateTime.format("h:mm:ss [<small>]A[</small>]")}
+  </div>
+</div>`;
+
+  let returnButton = document.querySelector("#return-button");
+
+  returnButton.style.display = "inline";
 
   //Interval for Updating time for all cities
   setInterval(() => {
@@ -90,5 +97,28 @@ updateTime();
 setInterval(updateTime, 1000);
 
 // Event listener for city selection
+
+function returnPage() {
+  let contentDiv = document.querySelector("#cities-grid");
+  let returnButton = document.querySelector("#return-button");
+  let previousContent = "";
+
+  //Return button
+
+  returnButton.addEventListener("click", () => {
+    // Revert the content back to previous
+    contentDiv.innerHTML = previousContent;
+
+    // Hide the return button
+    returnButton.style.display = "none";
+    // Reset the selection
+    citiesSelectElement.value = "";
+  });
+  previousContent = contentDiv.innerHTML;
+
+  // Show the return button
+}
+
 let citiesSelectElement = document.querySelector("#cities-select");
-citiesSelectElement.addEventListener("change", updateCity);
+
+citiesSelectElement.addEventListener("change", updateCity, returnPage);
