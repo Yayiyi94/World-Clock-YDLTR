@@ -1,3 +1,7 @@
+let originalContent = "";
+let globalIntervalId = null;
+let cityIntervalId = null;
+
 function updateTime() {
   let parisElement = document.querySelector("#paris");
   let singaporeElement = document.querySelector("#singapore");
@@ -57,68 +61,79 @@ function updateTime() {
 }
 
 function updateCity(event) {
+  clearInterval(globalIntervalId); // Stop global updates
+  clearInterval(cityIntervalId); // Clear previous city interval
+
   let cityTimeZone = event.target.value;
+  if (cityTimeZone === "") return;
+
   if (cityTimeZone === "current") {
     cityTimeZone = moment.tz.guess();
   }
+
   let cityName =
     cityTimeZone.replace("_", " ").split("/")[1] || "Your Location";
   let cityDateTime = moment().tz(cityTimeZone);
   let citiesElement = document.querySelector("#cities-grid");
 
+  citiesElement.innerHTML = `
+    <div class="current-city" id="current">
+      <div class="name-date-container">
+        <div class="city-name" id="city-name">${cityName}</div>
+        <div class="city-date" id="city-date">${cityDateTime.format(
+          "MMMM Do YYYY"
+        )}</div>
+      </div>
+      <div class="city-time" id="city-time">${cityDateTime.format(
+        "h:mm:ss [<small>]A[</small>]"
+      )}</div>
+    </div>
+  `;
   citiesElement.style.display = "block";
 
-  citiesElement.innerHTML = `<div class="city" id="current">
-  <div class="name-date-container">
-    <div class="city-name" id="city-name">
-      ${cityName}
-    </div>
-    <div class="city-date" id="city-date">
-      ${cityDateTime.format("MMMM Do YYYY")}
-    </div>
-  </div>
-  <div class="city-time" id="city-time">
-    ${cityDateTime.format("h:mm:ss [<small>]A[</small>]")}
-  </div>
-</div>`;
+  document.querySelector("#return-button").style.display = "block";
 
-  let returnButton = document.querySelector("#return-button");
-
-  returnButton.style.display = "inline";
-
-  //Interval for Updating time for all cities
-  setInterval(() => {
+  // Live update for selected city only
+  cityIntervalId = setInterval(() => {
     updateCity(event);
   }, 1000);
 }
 
-// Initial call and interval for updating time
-updateTime();
+//Update current city wven in the 2 page
 setInterval(updateTime, 1000);
 
-// Event listener for city selection
-
 function returnPage() {
-  let contentDiv = document.querySelector("#cities-grid");
+  let citiesElement = document.querySelector("#cities-grid");
   let returnButton = document.querySelector("#return-button");
-  let previousContent = "";
 
-  //Return button
+  // Restore original content
+  citiesElement.innerHTML = originalContent;
+  citiesElement.style.display = "grid";
 
-  returnButton.addEventListener("click", () => {
-    // Revert the content back to previous
-    contentDiv.innerHTML = previousContent;
+  // Hide return button
+  returnButton.style.display = "none";
 
-    // Hide the return button
-    returnButton.style.display = "none";
-    // Reset the selection
-    citiesSelectElement.value = "";
-  });
-  previousContent = contentDiv.innerHTML;
+  // Reset dropdown
+  document.querySelector("#cities-select").value = "";
 
-  // Show the return button
+  // Clear city interval and restore global one
+  clearInterval(cityIntervalId);
+  globalIntervalId = setInterval(updateTime, 1000);
 }
 
-let citiesSelectElement = document.querySelector("#cities-select");
+// Save original content when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  originalContent = document.querySelector("#cities-grid").innerHTML;
 
-citiesSelectElement.addEventListener("change", updateCity, returnPage);
+  // Start global updates
+  updateTime();
+  globalIntervalId = setInterval(updateTime, 1000);
+
+  // Setup event listeners
+  document
+    .querySelector("#cities-select")
+    .addEventListener("change", updateCity);
+  document
+    .querySelector("#return-button")
+    .addEventListener("click", returnPage);
+});
